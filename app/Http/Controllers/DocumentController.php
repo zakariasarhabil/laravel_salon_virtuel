@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Stand;
+use App\Document;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 
-class StandController extends Controller
+class DocumentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +15,9 @@ class StandController extends Controller
      */
     public function index()
     {
-        $stand = Stand::with('reseau','video','galerie','temoignage','document','lienex','theme','exposant','espace')->get();
-        return $stand ;
+        $document = Document::with('stand')->get();
+
+        return $document;
     }
 
     /**
@@ -36,17 +38,18 @@ class StandController extends Controller
      */
     public function store(Request $request)
     {
-        $stand = new Stand();
-        $stand->description = $request->description;
-        $stand-> status = $request->status;
-        $stand->theme_id = $request->theme_id;
-        $stand->espace_exposant_id = $request->espace_exposant_id;
-        $stand->exposant_id = $request->exposant_id;
+        $document = new Document();
+        $document->name = $request->name;
+        $document->stand_id=$request->stand_id;
 
-        $stand->save();
+        if($request->hasFile('file')) {
+            $document->file = $request->file->store('public/image');
+        }
+
+        $document->save();
+        return $document;
 
 
-        return $stand;
     }
 
     /**
@@ -57,8 +60,9 @@ class StandController extends Controller
      */
     public function show($id)
     {
-        $stand = Stand::with('reseau','video','galerie','temoignage','document','lienex','theme','exposant','espace')->find($id);
-        return $stand;
+        $document = Document::with('stand')->find($id);
+
+        return $document;
     }
 
     /**
@@ -66,7 +70,7 @@ class StandController extends Controller
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
-     */
+    //  */
     // public function edit($id)
     // {
     //     //
@@ -81,16 +85,16 @@ class StandController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $stand = Stand::findOrFail($id);
-        $stand->description = $request->description;
-        $stand-> status = $request->status;
-        $stand->theme_id = $request->theme_id;
-        $stand->espace_id = $request->espace_id;
-        $stand->exposant_id = $request->exposant_id;
+        $document = Document::findOrFail($id);
+        $document->name = $request->name;
+        $document->stand_id=$request->stand_id;
 
-        $stand->save();
+        if($request->hasFile('file')) {
+            $document->file = $request->file->store('public/image');
+        }
 
-        return $stand;
+        $document->save();
+        return $document;
     }
 
     /**
@@ -101,7 +105,7 @@ class StandController extends Controller
      */
     public function destroy($id)
     {
-        Stand::destroy($id);
+        Document::destroy($id);
         return 'delete !!!!';
     }
 }

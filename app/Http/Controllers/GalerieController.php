@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Stand;
+use App\Galerie;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 
-class StandController extends Controller
+class GalerieController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +15,8 @@ class StandController extends Controller
      */
     public function index()
     {
-        $stand = Stand::with('reseau','video','galerie','temoignage','document','lienex','theme','exposant','espace')->get();
-        return $stand ;
+        $galerie = Galerie::with('stand')->get();
+        return $galerie;
     }
 
     /**
@@ -36,17 +37,19 @@ class StandController extends Controller
      */
     public function store(Request $request)
     {
-        $stand = new Stand();
-        $stand->description = $request->description;
-        $stand-> status = $request->status;
-        $stand->theme_id = $request->theme_id;
-        $stand->espace_exposant_id = $request->espace_exposant_id;
-        $stand->exposant_id = $request->exposant_id;
-
-        $stand->save();
+        $galerie = new Galerie();
+        $galerie->name = $request->name;
+        $galerie->keyword=$request->keyword;
+        $galerie->stand_id =  $request->stand_id;
 
 
-        return $stand;
+        if($request->hasFile('link')) {
+            $galerie->link = $request->link->store('public/image');
+        }
+
+        $galerie->save();
+
+        return $galerie;
     }
 
     /**
@@ -57,8 +60,8 @@ class StandController extends Controller
      */
     public function show($id)
     {
-        $stand = Stand::with('reseau','video','galerie','temoignage','document','lienex','theme','exposant','espace')->find($id);
-        return $stand;
+        $galerie = Galerie::with('stand')->find($id);
+        return $galerie;
     }
 
     /**
@@ -81,16 +84,18 @@ class StandController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $stand = Stand::findOrFail($id);
-        $stand->description = $request->description;
-        $stand-> status = $request->status;
-        $stand->theme_id = $request->theme_id;
-        $stand->espace_id = $request->espace_id;
-        $stand->exposant_id = $request->exposant_id;
+        $galerie = Galerie::findOrFail($id);
+        $galerie->name = $request->name;
+        $galerie->keyword=$request->keyword;
+        $galerie->stand_id =  $request->stand_id;
 
-        $stand->save();
+        if($request->hasFile('link')) {
+            $galerie->link = $request->link->store('public/image');
+        }
 
-        return $stand;
+        $galerie->save();
+
+        return $galerie;
     }
 
     /**
@@ -101,7 +106,7 @@ class StandController extends Controller
      */
     public function destroy($id)
     {
-        Stand::destroy($id);
+        Galerie::destroy($id);
         return 'delete !!!!';
     }
 }

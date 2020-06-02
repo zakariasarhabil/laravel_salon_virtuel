@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Stand;
+use App\Video;
 use Illuminate\Http\Request;
 
-class StandController extends Controller
+use Illuminate\Http\UploadedFile;
+
+
+class VideoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +17,8 @@ class StandController extends Controller
      */
     public function index()
     {
-        $stand = Stand::with('reseau','video','galerie','temoignage','document','lienex','theme','exposant','espace')->get();
-        return $stand ;
+        $reseau = Video::with('stand')->get();
+        return $reseau ;
     }
 
     /**
@@ -36,17 +39,17 @@ class StandController extends Controller
      */
     public function store(Request $request)
     {
-        $stand = new Stand();
-        $stand->description = $request->description;
-        $stand-> status = $request->status;
-        $stand->theme_id = $request->theme_id;
-        $stand->espace_exposant_id = $request->espace_exposant_id;
-        $stand->exposant_id = $request->exposant_id;
+        $video = new Video();
+        $video->name = $request->name;
+        $video->stand_id =  $request->stand_id;
 
-        $stand->save();
+        if($request->hasFile('link')) {
+            $video->link = $request->link->store('public/image');
+        }
 
+        $video->save();
 
-        return $stand;
+        return $video;
     }
 
     /**
@@ -57,8 +60,8 @@ class StandController extends Controller
      */
     public function show($id)
     {
-        $stand = Stand::with('reseau','video','galerie','temoignage','document','lienex','theme','exposant','espace')->find($id);
-        return $stand;
+        $video = Video::with('stand')->find($id);
+        return $video;
     }
 
     /**
@@ -81,16 +84,18 @@ class StandController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $stand = Stand::findOrFail($id);
-        $stand->description = $request->description;
-        $stand-> status = $request->status;
-        $stand->theme_id = $request->theme_id;
-        $stand->espace_id = $request->espace_id;
-        $stand->exposant_id = $request->exposant_id;
+        $video = Video::findOrFail($id);
+        $video->name = $request->name;
+        $video->stand_id =  $request->stand_id;
 
-        $stand->save();
+        if($request->hasFile('link')) {
+            $video->link = $request->link->store('public/image');
+        }
 
-        return $stand;
+
+        $video->save();
+
+        return $video;
     }
 
     /**
@@ -101,7 +106,7 @@ class StandController extends Controller
      */
     public function destroy($id)
     {
-        Stand::destroy($id);
+        Video::destroy($id);
         return 'delete !!!!';
     }
 }

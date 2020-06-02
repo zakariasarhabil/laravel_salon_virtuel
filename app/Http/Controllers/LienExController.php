@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Stand;
+use App\LienEx;
 use Illuminate\Http\Request;
 
-class StandController extends Controller
+class LienExController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +14,8 @@ class StandController extends Controller
      */
     public function index()
     {
-        $stand = Stand::with('reseau','video','galerie','temoignage','document','lienex','theme','exposant','espace')->get();
-        return $stand ;
+        $lien = LienEx::with('stand')->get();
+        return $lien;
     }
 
     /**
@@ -36,17 +36,14 @@ class StandController extends Controller
      */
     public function store(Request $request)
     {
-        $stand = new Stand();
-        $stand->description = $request->description;
-        $stand-> status = $request->status;
-        $stand->theme_id = $request->theme_id;
-        $stand->espace_exposant_id = $request->espace_exposant_id;
-        $stand->exposant_id = $request->exposant_id;
+        $lien = new LienEx();
+        $lien->name=$request->name;
+        $lien->stand_id =  $request->stand_id;
 
-        $stand->save();
+        $lien->save();
 
+        return $lien;
 
-        return $stand;
     }
 
     /**
@@ -57,8 +54,8 @@ class StandController extends Controller
      */
     public function show($id)
     {
-        $stand = Stand::with('reseau','video','galerie','temoignage','document','lienex','theme','exposant','espace')->find($id);
-        return $stand;
+        $lien = LienEx::with('stand')->findOrFail($id);
+        return $lien;
     }
 
     /**
@@ -81,16 +78,13 @@ class StandController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $stand = Stand::findOrFail($id);
-        $stand->description = $request->description;
-        $stand-> status = $request->status;
-        $stand->theme_id = $request->theme_id;
-        $stand->espace_id = $request->espace_id;
-        $stand->exposant_id = $request->exposant_id;
+        $lien =  LienEx::findOrFail($id);
+        $lien->name=$request->name;
+        $lien->stand_id =  $request->stand_id;
 
-        $stand->save();
+        $lien->save();
 
-        return $stand;
+        return $lien;
     }
 
     /**
@@ -101,7 +95,7 @@ class StandController extends Controller
      */
     public function destroy($id)
     {
-        Stand::destroy($id);
+        LienEx::destroy($id);
         return 'delete !!!!';
     }
 }

@@ -28,6 +28,29 @@ Route::apiResource('/stand','StandController');
 
 Route::apiResource('/reseau','ReseauController');
 
+Route::apiResource('/video','VideoController');
+
+Route::apiResource('/galerie','GalerieController');
+
+Route::apiResource('/temoignage','TemoignageController');
+
+Route::apiResource('/document','DocumentController');
+
+Route::apiResource('/lien','LienExController');
+
+Route::apiResource('/theme','ThemeController');
+
+Route::apiResource('/espace','EspaceExposantController');
+
+Route::apiResource('/exposant','ExposantController');
+
+Route::apiResource('/event', 'EventController');
+
+
+
+
+
+
 
 // Route::get('/reseau','ReseauController@index');
 

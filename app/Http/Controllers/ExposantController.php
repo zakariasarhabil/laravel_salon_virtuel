@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Stand;
+use App\Exposant;
 use Illuminate\Http\Request;
 
-class StandController extends Controller
+class ExposantController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +14,9 @@ class StandController extends Controller
      */
     public function index()
     {
-        $stand = Stand::with('reseau','video','galerie','temoignage','document','lienex','theme','exposant','espace')->get();
-        return $stand ;
+        $exposant = Exposant::with('stand')->get();
+
+        return $exposant;
     }
 
     /**
@@ -36,17 +37,13 @@ class StandController extends Controller
      */
     public function store(Request $request)
     {
-        $stand = new Stand();
-        $stand->description = $request->description;
-        $stand-> status = $request->status;
-        $stand->theme_id = $request->theme_id;
-        $stand->espace_exposant_id = $request->espace_exposant_id;
-        $stand->exposant_id = $request->exposant_id;
+        $exposant = new Exposant();
+        $exposant->nom=$request->nom;
+        $exposant->prenom=$request->prenom;
 
-        $stand->save();
+        $exposant->save();
 
-
-        return $stand;
+        return $exposant;
     }
 
     /**
@@ -57,8 +54,9 @@ class StandController extends Controller
      */
     public function show($id)
     {
-        $stand = Stand::with('reseau','video','galerie','temoignage','document','lienex','theme','exposant','espace')->find($id);
-        return $stand;
+        $exposant = Exposant::with('stand')->findOrFail($id);
+
+        return $exposant;
     }
 
     /**
@@ -81,16 +79,13 @@ class StandController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $stand = Stand::findOrFail($id);
-        $stand->description = $request->description;
-        $stand-> status = $request->status;
-        $stand->theme_id = $request->theme_id;
-        $stand->espace_id = $request->espace_id;
-        $stand->exposant_id = $request->exposant_id;
+        $exposant = Exposant::findOrFail($id);
+        $exposant->nom=$request->nom;
+        $exposant->prenom=$request->prenom;
 
-        $stand->save();
+        $exposant->save();
 
-        return $stand;
+        return $exposant;
     }
 
     /**
@@ -101,7 +96,8 @@ class StandController extends Controller
      */
     public function destroy($id)
     {
-        Stand::destroy($id);
+        Exposant::destroy($id);
+
         return 'delete !!!!';
     }
 }

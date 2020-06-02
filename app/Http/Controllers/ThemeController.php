@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Stand;
+use App\Theme;
 use Illuminate\Http\Request;
 
-class StandController extends Controller
+class ThemeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +14,9 @@ class StandController extends Controller
      */
     public function index()
     {
-        $stand = Stand::with('reseau','video','galerie','temoignage','document','lienex','theme','exposant','espace')->get();
-        return $stand ;
+        $theme =Theme::with('stand')->get();
+
+        return $theme;
     }
 
     /**
@@ -36,17 +37,15 @@ class StandController extends Controller
      */
     public function store(Request $request)
     {
-        $stand = new Stand();
-        $stand->description = $request->description;
-        $stand-> status = $request->status;
-        $stand->theme_id = $request->theme_id;
-        $stand->espace_exposant_id = $request->espace_exposant_id;
-        $stand->exposant_id = $request->exposant_id;
+        $theme = new Theme();
+        $theme->name=$request->name;
+        $theme->path=$request->path;
 
-        $stand->save();
+        $theme->save();
+
+        return $theme;
 
 
-        return $stand;
     }
 
     /**
@@ -57,8 +56,10 @@ class StandController extends Controller
      */
     public function show($id)
     {
-        $stand = Stand::with('reseau','video','galerie','temoignage','document','lienex','theme','exposant','espace')->find($id);
-        return $stand;
+        $theme = Theme::with('stand')->findOrFail($id);
+
+        return $theme;
+
     }
 
     /**
@@ -81,16 +82,13 @@ class StandController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $stand = Stand::findOrFail($id);
-        $stand->description = $request->description;
-        $stand-> status = $request->status;
-        $stand->theme_id = $request->theme_id;
-        $stand->espace_id = $request->espace_id;
-        $stand->exposant_id = $request->exposant_id;
+        $theme = Theme::findOrFail($id);
+        $theme->name=$request->name;
+        $theme->path=$request->path;
 
-        $stand->save();
+        $theme->save();
 
-        return $stand;
+        return $theme;
     }
 
     /**
@@ -101,7 +99,8 @@ class StandController extends Controller
      */
     public function destroy($id)
     {
-        Stand::destroy($id);
+        Theme::destroy($id);
+
         return 'delete !!!!';
     }
 }

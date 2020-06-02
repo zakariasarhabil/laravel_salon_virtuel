@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Stand;
+use App\Temoignage;
 use Illuminate\Http\Request;
 
-class StandController extends Controller
+class TemoignageController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,10 +14,11 @@ class StandController extends Controller
      */
     public function index()
     {
-        $stand = Stand::with('reseau','video','galerie','temoignage','document','lienex','theme','exposant','espace')->get();
-        return $stand ;
-    }
+        $testmon = Temoignage::with('stand')->get();
 
+        return $testmon;
+
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -36,19 +37,20 @@ class StandController extends Controller
      */
     public function store(Request $request)
     {
-        $stand = new Stand();
-        $stand->description = $request->description;
-        $stand-> status = $request->status;
-        $stand->theme_id = $request->theme_id;
-        $stand->espace_exposant_id = $request->espace_exposant_id;
-        $stand->exposant_id = $request->exposant_id;
+        $testmon = new Temoignage();
+        $testmon->name = $request->name;
+        $testmon->content = $request->content;
+        $testmon->stand_id = $request->stand_id;
 
-        $stand->save();
+        if($request->hasFile('avatar')) {
+            $testmon->avatar = $request->avatar->store('public/image');
+        }
 
 
-        return $stand;
+        $testmon->save();
+
+        return $testmon;
     }
-
     /**
      * Display the specified resource.
      *
@@ -57,9 +59,10 @@ class StandController extends Controller
      */
     public function show($id)
     {
-        $stand = Stand::with('reseau','video','galerie','temoignage','document','lienex','theme','exposant','espace')->find($id);
-        return $stand;
+        $testmon = Temoignage::with('stand')->find($id);
+        return $testmon;
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -81,18 +84,19 @@ class StandController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $stand = Stand::findOrFail($id);
-        $stand->description = $request->description;
-        $stand-> status = $request->status;
-        $stand->theme_id = $request->theme_id;
-        $stand->espace_id = $request->espace_id;
-        $stand->exposant_id = $request->exposant_id;
+        $testmon = Temoignage::findOrFail($id);
+        $testmon->name = $request->name;
+        $testmon->content = $request->content;
+        $testmon->stand_id = $request->stand_id;
 
-        $stand->save();
+        if($request->hasFile('avatar')) {
+            $testmon->avatar = $request->avatar->store('avatar');
+        }
 
-        return $stand;
+        $testmon->save();
+
+        return $testmon;
     }
-
     /**
      * Remove the specified resource from storage.
      *
@@ -101,7 +105,7 @@ class StandController extends Controller
      */
     public function destroy($id)
     {
-        Stand::destroy($id);
+        Temoignage::destroy($id);
         return 'delete !!!!';
     }
 }
