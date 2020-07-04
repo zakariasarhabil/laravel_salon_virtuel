@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class LienEx extends Model
 {
     protected $fillable = [
-        'id', 'name', 'stand_id'
+        'id', 'name','link', 'stand_id'
     ];
 
     public function stand() {

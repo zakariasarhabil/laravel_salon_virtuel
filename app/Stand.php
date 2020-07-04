@@ -9,8 +9,14 @@ class Stand extends Model
 
     // protected $table = 'stands';
     protected $fillable = [
-        'id', 'description', 'status','exposant_id', 'espace_exposant_id','theme_id'
+        'id', 'description', 'name'
+        //  'espace_exposant_id','theme_id', 'user_id'
     ];
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
+
     public function reseau() {
         return $this->hasMany('App\Reseau');
     }
@@ -37,10 +43,6 @@ class Stand extends Model
 
     public function theme() {
         return $this->belongsTo('App\Theme');
-    }
-
-    public function exposant() {
-        return $this->belongsTo('App\Exposant');
     }
 
     public function espace() {

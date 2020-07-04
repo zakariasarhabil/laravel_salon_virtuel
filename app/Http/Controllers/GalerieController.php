@@ -16,7 +16,7 @@ class GalerieController extends Controller
     public function index()
     {
         $galerie = Galerie::with('stand')->get();
-        return $galerie;
+        return $galerie->name;
     }
 
     /**
@@ -40,12 +40,13 @@ class GalerieController extends Controller
         $galerie = new Galerie();
         $galerie->name = $request->name;
         $galerie->keyword=$request->keyword;
+        $galerie->link = $request->link;
         $galerie->stand_id =  $request->stand_id;
 
 
-        if($request->hasFile('link')) {
-            $galerie->link = $request->link->store('public/image');
-        }
+        // if($request->hasFile('link')) {
+        //     $galerie->link = $request->link->store('public/image');
+        // }
 
         $galerie->save();
 

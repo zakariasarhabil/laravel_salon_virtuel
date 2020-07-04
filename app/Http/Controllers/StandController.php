@@ -4,9 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Stand;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class StandController extends Controller
 {
+    public function __construct()
+    {
+     $this->middleware('auth:sanctum');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +19,9 @@ class StandController extends Controller
      */
     public function index()
     {
-        $stand = Stand::with('reseau','video','galerie','temoignage','document','lienex','theme','exposant','espace')->get();
+
+        $stand = Stand::with('user','reseau','video','galerie','temoignage','document','lienex','theme','espace')->get();
+
         return $stand ;
     }
 
@@ -37,11 +44,16 @@ class StandController extends Controller
     public function store(Request $request)
     {
         $stand = new Stand();
+
+        // $this->authorize("post.stand", $stand);
+
         $stand->description = $request->description;
-        $stand-> status = $request->status;
+        $stand-> name = $request->name;
         $stand->theme_id = $request->theme_id;
         $stand->espace_exposant_id = $request->espace_exposant_id;
-        $stand->exposant_id = $request->exposant_id;
+         $stand->user_id = $request->user()->id;
+
+
 
         $stand->save();
 
@@ -82,11 +94,20 @@ class StandController extends Controller
     public function update(Request $request, $id)
     {
         $stand = Stand::findOrFail($id);
-        $stand->description = $request->description;
-        $stand-> status = $request->status;
-        $stand->theme_id = $request->theme_id;
-        $stand->espace_id = $request->espace_id;
-        $stand->exposant_id = $request->exposant_id;
+
+    //    if (Gate::denies('stand.update', $stand)) {
+    //        abort(403, "you can't edit stand");
+    //    }
+
+    // $this->authorize("stand.update", $stand);
+
+
+
+       $stand->description = $request->description;
+       $stand-> name = $request->name;
+       $stand->theme_id = $request->theme_id;
+       $stand->espace_exposant_id = $request->espace_exposant_id;
+       $stand->user_id = $request->user()->id;
 
         $stand->save();
 
@@ -101,7 +122,11 @@ class StandController extends Controller
      */
     public function destroy($id)
     {
-        Stand::destroy($id);
+       $stand = Stand::findOrfail($id);
+       $this->authorize("stand.delete", $stand);
+
+       $stand->delete();
+
         return 'delete !!!!';
     }
 }

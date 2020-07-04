@@ -40,11 +40,12 @@ class DocumentController extends Controller
     {
         $document = new Document();
         $document->name = $request->name;
+        $document->file = $request->file;
         $document->stand_id=$request->stand_id;
 
-        if($request->hasFile('file')) {
-            $document->file = $request->file->store('public/image');
-        }
+        // if($request->hasFile('file')) {
+        //     $document->file = $request->file->store('public/image');
+        // }
 
         $document->save();
         return $document;

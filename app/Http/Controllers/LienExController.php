@@ -38,6 +38,7 @@ class LienExController extends Controller
     {
         $lien = new LienEx();
         $lien->name=$request->name;
+        $lien->link=$request->link;
         $lien->stand_id =  $request->stand_id;
 
         $lien->save();

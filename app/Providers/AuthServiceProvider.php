@@ -25,6 +25,26 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        // Gate::define("stand.update", function($user, $stand) {
+        //     return $user->id === $stand->user_id;
+        // });
+
+        // Gate::define("stand.delete", function($user, $stand) {
+        //     return $user->id === $stand->user_id;
+        // });
+
+        // Gate::define("post.stand",function($user, $stand){
+        //     return $user->is_exposant === false;
+        // });
+
+
+        // Gate::before(function($user, $ability){
+        //     if($user->is_exposant && in_array($ability, ["post.stand"]) ) {
+        //         return true;
+        //     }
+        // });
+
+
+
     }
 }

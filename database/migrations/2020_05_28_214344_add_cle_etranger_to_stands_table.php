@@ -14,16 +14,25 @@ class AddCleEtrangerToStandsTable extends Migration
     public function up()
     {
         Schema::table('stands', function (Blueprint $table) {
-            $table->unsignedBigInteger('theme_id');
-            $table->foreign('theme_id')->references('id')->on('themes');
+            // $table->unsignedBigInteger('theme_id');
+            // $table->foreign('theme_id')->references('id')->on('themes');
 
 
-            $table->unsignedBigInteger('espace_exposant_id');
-            $table->foreign('espace_exposant_id')->references('id')->on('espace_exposants');
+            // $table->unsignedBigInteger('espace_exposant_id');
+            // $table->foreign('espace_exposant_id')->references('id')->on('espace_exposants');
+
+            $table->foreignId('theme_id')->constrained();
+
+            $table->foreignId('espace_exposant_id')->constrained();
+
+            $table->foreignId('user_id')->constrained();
 
 
-            $table->unsignedBigInteger('exposant_id');
-            $table->foreign('exposant_id')->references('id')->on('exposants');
+
+
+
+
+
         });
     }
 
@@ -35,7 +44,7 @@ class AddCleEtrangerToStandsTable extends Migration
     public function down()
     {
         Schema::table('stands', function (Blueprint $table) {
-            $table->dropColumn(['theme_id','espace_id','exposant_id']);
+            $table->dropColumn(['theme_id','exposant_id','user_id']);
         });
     }
 }

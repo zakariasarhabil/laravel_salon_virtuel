@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 
 class EspaceExposantController extends Controller
 {
+    public function __construct()
+    {
+     $this->middleware('auth:sanctum');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -15,6 +19,7 @@ class EspaceExposantController extends Controller
     public function index()
     {
         $espace = EspaceExposant::with('stand','event')->get();
+        $this->authorize("post.stand", $espace);
 
         return $espace;
     }
@@ -38,6 +43,7 @@ class EspaceExposantController extends Controller
     public function store(Request $request)
     {
         $espace = new EspaceExposant();
+        $this->authorize("post.stand", $espace);
         $espace->name=$request->name;
         $espace->event_id=$request->event_id;
 
@@ -55,6 +61,7 @@ class EspaceExposantController extends Controller
     public function show($id)
     {
         $espace = EspaceExposant::with('stand','event')->findOrFail($id);
+        // $this->authorize("post.stand", $espace);
 
         return $espace;
     }
@@ -80,6 +87,7 @@ class EspaceExposantController extends Controller
     public function update(Request $request, $id)
     {
         $espace = EspaceExposant::findOrFail($id);
+        $this->authorize("post.stand", $espace);
         $espace->name=$request->name;
         $espace->event_id=$request->event_id;
 
@@ -96,7 +104,8 @@ class EspaceExposantController extends Controller
      */
     public function destroy($id)
     {
-        EspaceExposant::destroy($id);
+        $espace =  EspaceExposant::destroy($id);
+        $this->authorize("post.stand", $espace);
         return 'delete !!!!';
     }
 }

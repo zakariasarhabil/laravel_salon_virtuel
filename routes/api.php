@@ -18,12 +18,13 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
+Route::post('/login', 'AuthController@login');
+Route::post('/register', 'AuthController@register');
+Route::get('/user/{id}', 'AuthController@getuser');
+Route::post('/logout', 'AuthController@logout')->middleware('auth:sanctum');
 
-// Route::get('/stand','StandController@index');
-// Route::get('/stand/{id}','StandController@show');
-// Route::post('/stand/create','StandController@store');
-// Route::put('/stand/{id}','StandController@update');
-// Route::delete('/stand/{id}','StandController@destroy');
+
+
 Route::apiResource('/stand','StandController');
 
 Route::apiResource('/reseau','ReseauController');
@@ -42,7 +43,7 @@ Route::apiResource('/theme','ThemeController');
 
 Route::apiResource('/espace','EspaceExposantController');
 
-Route::apiResource('/exposant','ExposantController');
+// Route::apiResource('/exposant','ExposantController');
 
 Route::apiResource('/event', 'EventController');
 
